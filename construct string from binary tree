@@ -1,0 +1,56 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+void buildString(struct TreeNode* root, char* result, int* index)
+{
+    if (root == NULL)
+        return;
+
+    // Add the node value
+    *index += sprintf(result + *index, "%d", root->val);
+
+    // Process children
+    if (root->left != NULL || root->right != NULL)
+    {
+        result[(*index)++] = '(';
+
+        if (root->left != NULL)
+            buildString(root->left, result, index);
+
+        result[(*index)++] = ')';
+    }
+
+    // Add right child if present
+    if (root->right != NULL)
+    {
+        result[(*index)++] = '(';
+        buildString(root->right, result, index);
+        result[(*index)++] = ')';
+    }
+
+    result[*index] = '\0';
+}
+
+char* tree2str(struct TreeNode* root)
+{
+    // Maximum space: values + parentheses + null terminator
+    char* result = (char*)malloc(120000 * sizeof(char));
+
+    if (result == NULL)
+        return NULL;
+
+    int index = 0;
+    buildString(root, result, &index);
+
+    return result;
+}
